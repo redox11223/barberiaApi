@@ -28,6 +28,10 @@ GET {{BarberiaApi_HostAddress}}/servicios/1
 Accept: application/json
 
 ###
+GET {{BarberiaApi_HostAddress}}/servicios?categoryId=1
+Accept: application/json
+
+###
 POST {{BarberiaApi_HostAddress}}/login
 Content-Type: application/json
 

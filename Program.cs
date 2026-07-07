@@ -59,7 +59,17 @@ categoria.MapPost("/", (CategoriaServicio categoriaServicio) =>
 });
 
 //Servicios
-servicio.MapGet("/", () => servicios);
+servicio.MapGet("/", (int? categoryId) =>
+{
+    var result = servicios.AsEnumerable();
+
+    if (categoryId.HasValue)
+    {
+        result = result.Where(s => s.CategoryId == categoryId.Value);
+    }
+
+    return result;
+});
 servicio.MapGet("/{id}", (int id) => servicios.FirstOrDefault(s => s.Id == id));
 servicio.MapPost("/", (Servicio servicio) =>
 {
