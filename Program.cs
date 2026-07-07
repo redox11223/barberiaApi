@@ -6,8 +6,8 @@ var app = builder.Build();
 
 List<Usuario> usuarios =
 [
-    new(1, "Miguel Angel", "admin@gmail.com", "123456", "Admin", "987654321", true),
-    new(2, "Pedro Trillo", "pedro@gmail.com", "123456", "User", "987654320", true)
+    new (){ Id = 1, FullName = "Miguel Angel", Email = "admin@gmail.com", Password = "123456", Role = "Admin", Phone = "987654321", IsActive = true },
+    new (){ Id = 2, FullName = "Pedro Trillo", Email = "pedro@gmail.com", Password = "123456", Role = "User", Phone = "987654320", IsActive = true }
 ];
 
 List<CategoriaServicio> categorias =
@@ -32,6 +32,21 @@ var servicio=app.MapGroup("/servicios");
 //Usuarios
 usuario.MapGet("/", () => usuarios);
 usuario.MapGet("/{id}", (int id) => usuarios.FirstOrDefault(u => u.Id == id));
+usuario.MapPut("/{id}", (int id, Usuario updatedUsuario) =>
+{
+    var usuario = usuarios.FirstOrDefault(u => u.Id == id);
+    if (usuario is null)
+    {
+        return Results.NotFound();
+    }
+
+    usuario.FullName = updatedUsuario.FullName;
+    usuario.Email = updatedUsuario.Email;
+    usuario.Password = updatedUsuario.Password;
+    usuario.Phone = updatedUsuario.Phone;
+
+    return Results.Ok(usuario);
+});
 
 //Categorias
 categoria.MapGet("/", () => categorias);
@@ -71,15 +86,15 @@ app.MapPost("/registro", (RegistroDto registroDto) =>
         return Results.BadRequest("El correo electrónico ya está registrado.");
     }
 
-    var nuevoUsuario = new Usuario(
-        usuarios.Max(u => u.Id) + 1,
-        registroDto.Name,
-        registroDto.Email,
-        registroDto.Password,
-        "User",
-        registroDto.PhoneNumber,
-        true
-    );
+    var nuevoUsuario = new Usuario{
+        Id = usuarios.Max(u => u.Id) + 1,
+        FullName = registroDto.Name,
+        Email = registroDto.Email,
+        Password = registroDto.Password,
+        Role = "User",
+        Phone = registroDto.PhoneNumber,
+        IsActive = true
+    };
 
     usuarios.Add(nuevoUsuario);
     return Results.Created($"/usuarios/{nuevoUsuario.Id}", nuevoUsuario);

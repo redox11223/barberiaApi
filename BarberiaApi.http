@@ -8,6 +8,18 @@ GET {{BarberiaApi_HostAddress}}/usuarios/1
 Accept: application/json
 
 ###
+PUT {{BarberiaApi_HostAddress}}/usuarios/1
+Content-Type: application/json
+
+{
+  "fullName": "David Angel",
+  "email": "miguel@gmail.com",
+  "password": "123456",
+  "phone": "987654321"
+}
+
+###
+
 GET {{BarberiaApi_HostAddress}}/servicios
 Accept: application/json
 
